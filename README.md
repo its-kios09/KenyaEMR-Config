@@ -194,3 +194,92 @@ as shown:
 #### 1.3.9 Reload the daemon process and restart tomcat9:
       sudo systemctl daemon-reload
       sudo systemctl restart tomcat9
+    
+#### Additional: FYI [ commands to start,stop and restart tomcat9]
+      sudo service tomcat9 start
+      sudo service tomcat9 stop
+      sudo service tomcat9 restart
+      sudo service tomcat9 status
+      
+## 1.4 Installation of mysql 5.6 to ubuntu 20:
+    if you have existing different version of mysql, uninstall the proceed as stated:
+    
+#### 1.4.0 To open terminal:
+      ctrl + alt + t 
+
+#### 1.4.1 add the package:
+      sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu trusty universe'
+      
+#### 1.4.2 then run: 
+      sudo add-apt-repository 'deb http://kr.archive.ubuntu.com/ubuntu xenial main' 
+      
+#### 1.4.3 Then Update and install:
+      sudo apt update
+      sudo apt-get install mysql-server-5.6                             
+    
+#### 1.4.4 Change ownership and set defaults then restart:
+      sudo touch /var/run/mysqld/mysql.sock
+      sudo chown mysql:mysql /var/run/mysqld
+      sudo update-rc.d mysql defaults
+      sudo service mysql restart
+  
+#### 1.4.5 FYI Commands to start,stop ,restart and check status Mysql:
+      sudo service mysql start
+      sudo service mysql stop
+      sudo service mysql restart
+      sudo service mysql status   
+      
+## 1.5 KenyaEMR System upgrade on already existing facilities Scenario:       
+#### 1.5.0 First make sure to make a backup database. [replace password and username and dump]
+
+By default the dump database will be store in /Home/ directory
+
+      sudo mysqldump -uUSER -pPASSWORD openmrs > FACILITYDUMPDATABASE.sql
+      
+##### 1.5.1 Using the provided upgrading folder by the Lead Developer,
+
+locate the setup script.sh
+
+To make the script executable, run the command. [setup_script is the script name]:
+
+       sudo chmod +x setup_script.sh
+       
+#### 1.5.2 Then, run the script:
+      ./setup_script.sh
+      
+#### 1.5.3 Confirm the modules and War file:
+locate to modules folder and make sure they are owned by tomcat. if not then change them.
+      cd /var/lib/OpenMRS/modules
+      
+##### 1.5.3.0 Then check to make sure they are owned by tomcat:
+      ll
+      
+#### 1.5.4 if not then change the ownership:
+      sudo chown tomcat:tomcat *.omod 
+  
+#### 1.5.5 Also give read write permissions to the modules:
+      sudo chmod 755 *.omod
+      
+#### 1.5.6 Confirm also that openmrs war file if owned by tomcat:
+      cd /var/lib/tomcat/webapps
+      
+#### 1.5.7 if not then change the ownership:
+      sudo chown tomcat:tomcat openmrs.war
+
+## 1.6 After Upgrade Source back Facility database. - Optional if the databse is working correctly.
+
+#### 1.6.0 Login to mysql:
+      sudo mysql -uUSER -pPASSSWORD; 
+
+#### 1.6.1 check available databses:
+      show databases;
+      
+#### 1.6.2 Select openmrs database:
+      use openmrs;
+      
+#### 1.6.3 now source back the facility database:
+      source /location/to/your/backup/database;
+      
+      
+## Thank you 
+############ incase of any question please DM^ Whatsapp
